@@ -286,8 +286,8 @@ library(ggnewscale)
 
 library(knitr)
 knitr::opts_chunk$set(comment=&quot;&quot;, cache=T, warning = F, message = F, 
-                      fig.path = &quot;figures-pdf/&quot;, 
-                      dev=&quot;svglite&quot;, dev=&quot;cairo_pdf&quot;)#dev.args=list(fix_text_size=FALSE))#dev=&quot;cairo_pdf&quot;)
+                      fig.path = &quot;figures/&quot;, 
+                      dev=&quot;svglite&quot;, dev.args=list(fix_text_size=FALSE))#dev=&quot;cairo_pdf&quot;)
 options(digits=4) # for kables
 
 load(&quot;data/maxfield_data.rda&quot;)
@@ -531,7 +531,7 @@ data.frame(dataset = c(&quot;Morphological traits&quot;, &quot;Physiological tra
 <pre class="r"><code>full_join(pt %&gt;% select(year, date, plantid, conductance, WUE, photosynthesis),
           lt %&gt;% select(year, year.round, plantid, sla, water_content, trichome_density)) %&gt;% 
   ggcorr(hjust=0.85, layout.exp=2, label=T, label_round=2)</code></pre>
-<embed src="figures-pdf/correlations-1.pdf" width="672" type="application/pdf" />
+<p><img src="figures/correlations-1.svg" width="672" /></p>
 </div>
 <div id="replicated-split-plot-models" class="section level1">
 <h1>Replicated split-plot models</h1>
@@ -798,7 +798,7 @@ grid.arrange(
   plot_split_plot(mod.split.emm, pt.subplot, phystraits)+ 
     guides(color = guide_legend(override.aes = list(color=&quot;white&quot;, shape=15, size=5))) + 
     theme(legend.title = element_text(color = &quot;white&quot;), legend.text = element_text(color = &quot;white&quot;)), nrow=1)</code></pre>
-<embed src="figures-pdf/Figure_1-1.pdf" width="864" type="application/pdf" />
+<p><img src="figures/Figure_1-1.svg" width="864" /></p>
 </div>
 <div id="repeated-measures" class="section level2">
 <h2>Repeated measures</h2>
@@ -885,7 +885,7 @@ anova_table(lt.mod.split.rm.3.tests, lt.mod.split.rm.3) %&gt;% kable()</code></p
 <h3>Figure S2</h3>
 <pre class="r"><code>lt.mod.split.rm.3.emm &lt;- map_dfr(lt.mod.split.rm.3, ~ summary(emmeans(.x, ~  year.round * water * snow)), .id=&quot;trait&quot;)
 plot_split_plot(lt.mod.split.rm.3.emm, lt.repeated.3.subplotround, leaftraits, facets=&quot;year.round&quot;) </code></pre>
-<embed src="figures-pdf/Figure_S2-1.pdf" width="384" type="application/pdf" />
+<p><img src="figures/Figure_S2-1.svg" width="384" /></p>
 </div>
 </div>
 </div>
@@ -1095,7 +1095,7 @@ anova_table(mod.abs.tests, mod.abs) %&gt;% kable()</code></pre>
 
 plot_abs(mod.abs, bind_rows(lt.subplot.r2, pt.subplot), c(leaftraits[2],phystraits[c(3,1,2)])) +
   scale_y_continuous(limits=c(-1.3, 1.8), breaks=c(-2:1))#subplot means</code></pre>
-<embed src="figures-pdf/Figure_2-1.pdf" width="576" type="application/pdf" />
+<p><img src="figures/Figure_2-1.svg" width="576" /></p>
 </div>
 </div>
 <div id="models-with-soil-moisture" class="section level1">
@@ -1226,7 +1226,7 @@ grid.arrange(
     xlab(&quot;Soil moisture next to plant or in subplot on closest date (%VWC)&quot;) +
     guides(color = guide_legend(override.aes = list(color=&quot;white&quot;, shape=15, size=5))) + 
     theme(legend.title = element_text(color = &quot;white&quot;), legend.text = element_text(color = &quot;white&quot;)), ncol=1)</code></pre>
-<embed src="figures-pdf/Figure_3-1.pdf" width="768" type="application/pdf" />
+<p><img src="figures/Figure_3-1.svg" width="768" /></p>
 </div>
 </div>
 <div id="fitness-vs.-treatments" class="section level1">
@@ -1328,7 +1328,7 @@ Anova_table(fitness.mod.tests) %&gt;% kable()</code></pre>
                           panel.border = element_rect(fill=NA, colour = &quot;black&quot;),
                           panel.spacing.x=unit(0, &quot;lines&quot;), panel.spacing.y=unit(1, &quot;lines&quot;),
                           plot.margin = margin(0,0,0,0, &quot;pt&quot;), legend.position = &quot;top&quot;) </code></pre>
-<embed src="figures-pdf/Figure_S3-1.pdf" width="432" type="application/pdf" />
+<p><img src="figures/Figure_S3-1.svg" width="432" /></p>
 </div>
 </div>
 <div id="selection" class="section level1">
@@ -1903,12 +1903,12 @@ selection_plots &lt;- expand_grid(treatment=c(&quot;water&quot;,&quot;snow&quot;
 <h2>Figure 4</h2>
 <pre class="r"><code>selection_plots$plot[[1]] + selection_plots$plot[[3]] + 
   plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; theme(legend.position=&quot;top&quot;)</code></pre>
-<embed src="figures-pdf/Figure_4-1.pdf" width="864" type="application/pdf" />
+<p><img src="figures/Figure_4-1.svg" width="864" /></p>
 </div>
 <div id="figure-5" class="section level2">
 <h2>Figure 5</h2>
 <pre class="r"><code>selection_plots$plot[[2]]</code></pre>
-<embed src="figures-pdf/Figure_5-1.pdf" width="864" type="application/pdf" />
+<p><img src="figures/Figure_5-1.svg" width="864" /></p>
 </div>
 <div id="figure-s4" class="section level2">
 <h2>Figure S4</h2>
@@ -1916,7 +1916,7 @@ selection_plots &lt;- expand_grid(treatment=c(&quot;water&quot;,&quot;snow&quot;
 selection_plots$plot[[5]] +
 (selection_plots$plot[[6]] + guides(linetype=&quot;none&quot;, color=&quot;none&quot;)) +
   plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; theme(legend.position=&quot;top&quot;)</code></pre>
-<embed src="figures-pdf/Figure_S4-1.pdf" width="864" type="application/pdf" />
+<p><img src="figures/Figure_S4-1.svg" width="864" /></p>
 </div>
 </div>
 <div id="timing" class="section level1">
@@ -1950,7 +1950,7 @@ ggplot(aes(y=variable, color=year))+
 }
 
 plot_timings(filter(timings, !variable %in% c(&quot;sds&quot;,&quot;mt&quot;,&quot;nt&quot;,&quot;ph&quot;)))</code></pre>
-<embed src="figures-pdf/Figure_S1-1.pdf" width="672" type="application/pdf" />
+<p><img src="figures/Figure_S1-1.svg" width="672" /></p>
 </div>
 </div>
 <div id="experiment-map" class="section level1">
@@ -1969,7 +1969,7 @@ ggplot(treatments_map) + coord_fixed(clip=&quot;off&quot;)+
   geom_text(aes(x=plot_x, y=plot_y, label=plot))+ theme_minimal() + 
   theme(legend.position=&quot;right&quot;, axis.title=element_blank(), axis.text = element_blank(), 
         axis.ticks = element_blank(), panel.background = element_blank(), panel.grid = element_blank())</code></pre>
-<embed src="figures-pdf/Methods_S1-1.pdf" width="624" type="application/pdf" />
+<p><img src="figures/Methods_S1-1.svg" width="624" /></p>
 </div>
 </div>
 
