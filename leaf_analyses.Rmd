@@ -1,0 +1,135 @@
+--- 
+title: "Code for \"Phenotypic plasticity and selection on leaf traits in response to snowmelt timing and summer precipitation\""
+author: "Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R. Campbell"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    self_contained: no
+    lib_dir: libs
+    code_folding: hide
+    toc: yes
+    toc_float: TRUE
+    theme: cosmo
+editor_options: 
+  chunk_output_type: console
+---
+<style type="text/css">
+.main-container { max-width: 1000px; margin-left: 0; margin-right: auto; }
+img{ max-width:200%; height: auto; }
+td, th { padding : 6px }
+</style>
+
+```{r setup, message=FALSE}
+library(tidyverse)
+library(lubridate)
+
+library(lme4)
+library(lmerTest)
+library(MuMIn)
+library(glmmTMB)
+library(emmeans)
+library(broom)
+library(broom.mixed)
+library(vegan)
+
+library(RColorBrewer)
+library(viridis)
+library(gridExtra)
+library(GGally)
+library(ggvegan)
+library(ggfortify) 
+library(ggnewscale)
+library(ggpattern)
+
+library(knitr)
+knitr::opts_chunk$set(comment="", cache=T, warning = F, message = F, fig.path = "images/")
+options(digits=4) # for kables
+
+load("data/maxfield_data.rda")
+
+options(contrasts = c("contr.sum", "contr.poly")) #needed for Type III SS
+
+anova_table <- function(df, mod) { #for lmer models and lmerTest::anova
+  df %>% select(trait, term, p.value) %>% 
+    #mutate(p.value=p.value %>% map_chr(~ format(.x,scientific=-2, digits=2 , nsmall=2)) %>% 
+    #         str_replace("e-0(\\d)"," x 10^-\\1^") %>% str_replace("e-(\\d+)"," x 10^-\\1^")) %>%
+    pivot_wider(names_from=term, values_from=p.value) %>% 
+    mutate(R2m = map_dbl(mod, ~ MuMIn::r.squaredGLMM(.x)[[1,"R2m"]]),
+           singular = map_lgl(mod, isSingular))
+}
+Anova_table <- function(df) { #for glmmTMB models and car::Anova
+  df %>% select(Trait=trait, term, p.value) %>% 
+    pivot_wider(names_from=term, values_from=p.value,names_repair="unique")
+}
+select <- dplyr::select
+snow_pal_grey <- c("grey50","black")
+```
+
+# Metadata
+
+```{r writeout}
+alldata <- list("treatments"=treatments %>% select(year, plotid, water, water4, snow, sun_date,precip_est_mm),
+                "leaftraits"=lt.plantyr %>% ungroup %>% 
+                  select(year, round, day, plotid, plant, VWC.sm, any_of(c(leaftraits, fitnesstraits))) %>% 
+                  arrange(year, round, plotid) %>% drop_na(plant) %>% filter(plant!="NA"),
+                "phystraits"=pt.plantyr %>% ungroup %>% 
+                  select(year, round, plotid, plant, VWC.plant, VWC.sm, any_of(c(phystraits, fitnesstraits))) %>% 
+                  arrange(year, round, plotid) %>% drop_na(plant) %>% filter(plant!="NA"))
+
+purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0("data/",., ".tsv"), na=""))
+```
+
+The following datasets are available in tab-delimited (TSV) format under the 'data' folder.
+
+## Treatments
+
+:The precipitation and snowmelt treatments in the split-plot design, with snowmelt dates for each plot and precipitation totals for each subplot.
+
+|Column|Description|
+|:- |:------ |
+|year|year|
+|plotid|plot number and subplot letter|
+|water|precipitation treatment, with mock rainouts combined with controls|
+|water4|precipitation treatment, with mock rainouts separate from controls|
+|snow|snowmelt treatment (in 2019, plot 2 was covered but coded as normal)|
+|sun_date|snowmelt date in each plot, determined by sunlight threshold|
+|precip_est_mm|estimated summer precipitation in each subplot (see Methods S1)|
+
+## Leaf traits
+
+:Morphological leaf traits measured during each round of sampling.
+
+|Column|Description|
+|:- |:------ |
+|year|year|
+|round|the first or second round of measurements (early/late summer)|
+|day|the day of the year measurement was taken|
+|plotid|plot number and subplot letter|
+|plant|unique plant identifier|
+|VWC.sm|The soil moisture averaged across the subplot on the date nearest the measurement|
+|sla|Specific leaf area (cm² g⁻¹)|
+|trichome_density|Trichome density (cm⁻²)|
+|water_content|Leaf water content (g H₂O g⁻¹)|
+|flowered|whether the plant flowered the next year|
+|survived|whether the plant survived to the next year|
+|RGR|Relative growth rate from this year to the next (year⁻¹)|
+
+## Physiology traits
+
+:Gas-exchange traits
+
+|Column|Description|
+|:- |:------ |
+|year|year|
+|round|the date the measurement was taken|
+|plotid|plot number and subplot letter|
+|plant|unique plant identifier|
+|VWC.plant|The soil moisture next to the plant on the date of measurement|
+|VWC.sm|The soil moisture averaged across the subplot on the date nearest the measurement|
+|photosynthesis|Photosynthetic rate (µmol CO₂ m⁻² s⁻¹)|
+|conductance|Stomatal conductance (mol H₂O m⁻² s⁻¹)|
+|WUE|Intrinsic water-use efficiency (µmol CO₂ mol⁻¹ H₂O)|
+|flowered|whether the plant flowered the next year|
+|survived|whether the plant survived to the next year|
+|RGR|Relative growth rate from this year to the next (year⁻¹)|
+
