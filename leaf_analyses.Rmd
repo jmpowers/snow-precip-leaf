@@ -35,6 +35,7 @@ library(vegan)
 library(RColorBrewer)
 library(viridis)
 library(gridExtra)
+library(patchwork)
 library(GGally)
 library(ggnewscale)
 
@@ -495,9 +496,8 @@ mod.selection %>% group_by(treatment, response) %>%
     Anova_table(.x %>% unnest(tests)) %>% kable() %>% print})
 ```
 
-## Figure 4, Figure 5, Figure S4
 
-```{r plot_selection, fig.width=9, fig.height=6}
+```{r plot_selection}
 plot_selection_facets <- function(response, treatment) {
   emt.selection.filtered <- emt.selection %>% 
     select(!!!treatment, response, year, trait, p.value) %>% 
@@ -536,15 +536,37 @@ plot_selection_facets <- function(response, treatment) {
     bind_cols(emt.selection.filtered) %>% 
     filter(sig=="signif") %>% 
     mutate(trait = factor(trait, levels=c(leaftraits, phystraits))) 
-  p <- p + geom_point(data=smooth.ends, aes(x=x,y=y), color="black", shape=8, size=2, inherit.aes = F)
-  print(p)
+  p + geom_point(data=smooth.ends, aes(x=x,y=y), color="black", shape=8, size=2, inherit.aes = F)
 }
 
-expand_grid(treatment=c("water","snow"), response = fitnesstraits) %>% 
-  pwalk(plot_selection_facets)
+selection_plots <- expand_grid(treatment=c("water","snow"), response = fitnesstraits) %>% 
+  mutate(plot = pmap(., plot_selection_facets))
 ```
 
-# Figure S1
+## Figure 4
+
+```{r Figure_4, fig.width=9, fig.height=11}
+selection_plots$plot[[1]] + selection_plots$plot[[3]] + 
+  plot_layout(guides = "collect", ncol=1) & theme(legend.position="top")
+```
+
+## Figure 5
+```{r Figure_5, fig.width=9, fig.height=6}
+selection_plots$plot[[2]]
+```
+
+## Figure S4
+
+```{r Figure_S4, fig.width=9, fig.height=16}
+(selection_plots$plot[[4]] + guides(linetype="none", color="none")) +
+selection_plots$plot[[5]] +
+(selection_plots$plot[[6]] + guides(linetype="none", color="none")) +
+  plot_layout(guides = "collect", ncol=1) & theme(legend.position="top")
+```
+
+# Timing
+
+## Figure S1
 
 ```{r Figure_S1}
   timings_labels <- c(snowcloth="Snow cloths applied to early plots", 
@@ -576,7 +598,9 @@ ggplot(aes(y=variable, color=year))+
 plot_timings(filter(timings, !variable %in% c("sds","mt","nt","ph")))
 ```
 
-# Methods S1
+# Experiment map
+
+## Methods S1
 
 ```{r Methods_S1, fig.height=4, fig.width=6.5}
 subplot_offset <- 1/6
