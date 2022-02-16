@@ -412,16 +412,16 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 <td align="left">leaf water content (g H₂O g⁻¹)</td>
 </tr>
 <tr class="even">
-<td align="left">flowered</td>
-<td align="left">whether the plant flowered the next year</td>
-</tr>
-<tr class="odd">
 <td align="left">survived</td>
 <td align="left">whether the plant survived to the next year</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">RGR</td>
 <td align="left">relative growth rate from this year to the next (year⁻¹)</td>
+</tr>
+<tr class="even">
+<td align="left">flowered</td>
+<td align="left">whether the plant flowered the next year</td>
 </tr>
 </tbody>
 </table>
@@ -477,16 +477,16 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 <td align="left">intrinsic water-use efficiency (µmol CO₂ mol⁻¹ H₂O)</td>
 </tr>
 <tr class="even">
-<td align="left">flowered</td>
-<td align="left">whether the plant flowered the next year</td>
-</tr>
-<tr class="odd">
 <td align="left">survived</td>
 <td align="left">whether the plant survived to the next year</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">RGR</td>
 <td align="left">relative growth rate from this year to the next (year⁻¹)</td>
+</tr>
+<tr class="even">
+<td align="left">flowered</td>
+<td align="left">whether the plant flowered the next year</td>
 </tr>
 </tbody>
 </table>
@@ -1272,17 +1272,6 @@ Anova_table(fitness.mod.tests) %&gt;% kable()</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">flowered</td>
-<td align="right">0</td>
-<td align="right">0.0000</td>
-<td align="right">0.8817</td>
-<td align="right">0.0885</td>
-<td align="right">0.3232</td>
-<td align="right">0.4297</td>
-<td align="right">0.6055</td>
-<td align="right">0.0903</td>
-</tr>
-<tr class="even">
 <td align="left">survived</td>
 <td align="right">0</td>
 <td align="right">0.0654</td>
@@ -1293,7 +1282,7 @@ Anova_table(fitness.mod.tests) %&gt;% kable()</code></pre>
 <td align="right">0.5450</td>
 <td align="right">0.0168</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">RGR</td>
 <td align="right">0</td>
 <td align="right">0.0000</td>
@@ -1304,13 +1293,24 @@ Anova_table(fitness.mod.tests) %&gt;% kable()</code></pre>
 <td align="right">0.5893</td>
 <td align="right">0.0082</td>
 </tr>
+<tr class="odd">
+<td align="left">flowered</td>
+<td align="right">0</td>
+<td align="right">0.0000</td>
+<td align="right">0.8817</td>
+<td align="right">0.0885</td>
+<td align="right">0.3232</td>
+<td align="right">0.4297</td>
+<td align="right">0.6055</td>
+<td align="right">0.0903</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div id="figure-s3" class="section level2">
 <h2>Figure S3</h2>
 <pre class="r"><code>ggplot(fitness.mod.emm %&gt;% mutate(snow=fct_relevel(snow, &quot;Normal&quot;, &quot;Early&quot;)), aes(x=water, color=snow, y=emmean)) + 
-  facet_grid(trait ~ year, scales=&quot;free_y&quot;, labeller = as_labeller(c(fitnessnames, set_names(2018:2020))), switch=&quot;y&quot;)+
+  facet_grid(trait ~ year, scales=&quot;free_y&quot;, labeller = as_labeller(c(fitnessnames, set_names(2018:2020))), switch=&quot;y&quot;, as.table=F)+
   geom_hline(data=data.frame(trait = fitnesstraits, plot=c(NA,NA,&quot;yes&quot;)), aes(linetype=plot, yintercept=0), color=&quot;grey&quot;)+
   guides(linetype=&quot;none&quot;)+
   geom_linerange(aes(ymin=lSE, ymax=uSE), position=position_dodge(width=0.8), size=1, show.legend=F) +

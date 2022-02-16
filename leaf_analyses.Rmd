@@ -103,9 +103,9 @@ The following datasets are available in tab-delimited (TSV) format under the 'da
 |sla|specific leaf area (cm² g⁻¹)|
 |trichome_density|trichome density (cm⁻²)|
 |water_content|leaf water content (g H₂O g⁻¹)|
-|flowered|whether the plant flowered the next year|
 |survived|whether the plant survived to the next year|
 |RGR|relative growth rate from this year to the next (year⁻¹)|
+|flowered|whether the plant flowered the next year|
 
 ## Physiological traits
 
@@ -120,9 +120,9 @@ The following datasets are available in tab-delimited (TSV) format under the 'da
 |photosynthesis|photosynthetic rate (µmol CO₂ m⁻² s⁻¹)|
 |conductance|stomatal conductance (mol H₂O m⁻² s⁻¹)|
 |WUE|intrinsic water-use efficiency (µmol CO₂ mol⁻¹ H₂O)|
-|flowered|whether the plant flowered the next year|
 |survived|whether the plant survived to the next year|
 |RGR|relative growth rate from this year to the next (year⁻¹)|
+|flowered|whether the plant flowered the next year|
 
 # Sample sizes
 
@@ -425,7 +425,7 @@ Anova_table(fitness.mod.tests) %>% kable()
 
 ```{r Figure_S3, fig.height=7, fig.width=4.5}
 ggplot(fitness.mod.emm %>% mutate(snow=fct_relevel(snow, "Normal", "Early")), aes(x=water, color=snow, y=emmean)) + 
-  facet_grid(trait ~ year, scales="free_y", labeller = as_labeller(c(fitnessnames, set_names(2018:2020))), switch="y")+
+  facet_grid(trait ~ year, scales="free_y", labeller = as_labeller(c(fitnessnames, set_names(2018:2020))), switch="y", as.table=F)+
   geom_hline(data=data.frame(trait = fitnesstraits, plot=c(NA,NA,"yes")), aes(linetype=plot, yintercept=0), color="grey")+
   guides(linetype="none")+
   geom_linerange(aes(ymin=lSE, ymax=uSE), position=position_dodge(width=0.8), size=1, show.legend=F) +
