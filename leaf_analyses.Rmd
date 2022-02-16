@@ -40,7 +40,8 @@ library(ggnewscale)
 
 library(knitr)
 knitr::opts_chunk$set(comment="", cache=T, warning = F, message = F, 
-                      fig.path = "figures/", dev="svglite", dev.args=list(fix_text_size=FALSE))
+                      fig.path = "figures/", 
+                      dev="svglite", dev.args=list(fix_text_size=FALSE))#dev="cairo_pdf")
 options(digits=4) # for kables
 
 load("data/maxfield_data.rda")
@@ -357,7 +358,7 @@ anova_table(mod.sm.tests, mod.sm) %>% kable()
 
 ## Figure 3
 
-```{r Figure_3, fig.width=8, fig.height=6}
+```{r Figure_3, fig.width=8, fig.height=12}
 plot_sm <- function(mod, data, traits.plot, tests=NULL) {
   data.long <- data %>% select(all_of(traits.plot), water, snow, year, sun_date, precip_est_mm, VWC) %>% 
     pivot_longer(all_of(traits.plot), names_to="trait") %>% 
@@ -387,14 +388,18 @@ plot_sm <- function(mod, data, traits.plot, tests=NULL) {
     geom_point(data = data.long, aes(y=value, color=year), size=1) +  
     geom_line(size=2) + 
     scale_color_manual(values=year_pal) + ylab("Standardized trait") + labs(color="Year") + 
-    #coord_fixed() + 
     theme_minimal() + theme(text=element_text(color="black", size=14), axis.text = element_text(color="black"),
                             panel.border = element_rect(fill=NA, colour = "black"))
   return(sm_plot)
 }
 
-plot_sm(mod.sm, lt.plantyr.r2, leaftraits) + xlab("Summer mean of soil moisture in subplot (%VWC)")
-plot_sm(mod.sm, pt.plantyr, phystraits) + xlab("Soil moisture next to plant or in subplot on closest date (%VWC)")
+grid.arrange(
+  plot_sm(mod.sm, lt.plantyr.r2, leaftraits) + 
+    xlab("Summer mean of soil moisture in subplot (%VWC)"),
+  plot_sm(mod.sm, pt.plantyr, phystraits) + 
+    xlab("Soil moisture next to plant or in subplot on closest date (%VWC)") +
+    guides(color = guide_legend(override.aes = list(color="white", shape=15, size=5))) + 
+    theme(legend.title = element_text(color = "white"), legend.text = element_text(color = "white")), ncol=1)
 ```
 
 # Fitness vs. treatments

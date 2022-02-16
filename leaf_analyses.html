@@ -285,7 +285,8 @@ library(ggnewscale)
 
 library(knitr)
 knitr::opts_chunk$set(comment=&quot;&quot;, cache=T, warning = F, message = F, 
-                      fig.path = &quot;figures/&quot;, dev=&quot;svglite&quot;, dev.args=list(fix_text_size=FALSE))
+                      fig.path = &quot;figures/&quot;, 
+                      dev=&quot;svglite&quot;, dev.args=list(fix_text_size=FALSE))#dev=&quot;cairo_pdf&quot;)
 options(digits=4) # for kables
 
 load(&quot;data/maxfield_data.rda&quot;)
@@ -1212,16 +1213,19 @@ anova_table(mod.sm.tests, mod.sm) %&gt;% kable()</code></pre>
     geom_point(data = data.long, aes(y=value, color=year), size=1) +  
     geom_line(size=2) + 
     scale_color_manual(values=year_pal) + ylab(&quot;Standardized trait&quot;) + labs(color=&quot;Year&quot;) + 
-    #coord_fixed() + 
     theme_minimal() + theme(text=element_text(color=&quot;black&quot;, size=14), axis.text = element_text(color=&quot;black&quot;),
                             panel.border = element_rect(fill=NA, colour = &quot;black&quot;))
   return(sm_plot)
 }
 
-plot_sm(mod.sm, lt.plantyr.r2, leaftraits) + xlab(&quot;Summer mean of soil moisture in subplot (%VWC)&quot;)</code></pre>
+grid.arrange(
+  plot_sm(mod.sm, lt.plantyr.r2, leaftraits) + 
+    xlab(&quot;Summer mean of soil moisture in subplot (%VWC)&quot;),
+  plot_sm(mod.sm, pt.plantyr, phystraits) + 
+    xlab(&quot;Soil moisture next to plant or in subplot on closest date (%VWC)&quot;) +
+    guides(color = guide_legend(override.aes = list(color=&quot;white&quot;, shape=15, size=5))) + 
+    theme(legend.title = element_text(color = &quot;white&quot;), legend.text = element_text(color = &quot;white&quot;)), ncol=1)</code></pre>
 <p><img src="figures/Figure_3-1.svg" width="768" /></p>
-<pre class="r"><code>plot_sm(mod.sm, pt.plantyr, phystraits) + xlab(&quot;Soil moisture next to plant or in subplot on closest date (%VWC)&quot;)</code></pre>
-<p><img src="figures/Figure_3-2.svg" width="768" /></p>
 </div>
 </div>
 <div id="fitness-vs.-treatments" class="section level1">
