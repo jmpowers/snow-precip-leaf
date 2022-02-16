@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R. Campbell" />
+
+<meta name="date" content="2022-02-15" />
+
+<title>Code for “Phenotypic plasticity and selection on leaf traits in response to snowmelt timing and summer precipitation”</title>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<script src="libs/navigation-1.1/codefolding.js"></script>
+<link href="libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Code for “Phenotypic plasticity and selection on leaf traits in response to snowmelt timing and summer precipitation”</h1>
+<h4 class="author">Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R. Campbell</h4>
+<h4 class="date">2022-02-15</h4>
+
+</div>
+
+
+<style type="text/css">
+.main-container { max-width: 1000px; margin-left: 0; margin-right: auto; }
+img{ max-width:200%; height: auto; }
+td, th { padding : 6px }
+</style>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+
+library(lme4)
+library(lmerTest)
+library(MuMIn)
+library(glmmTMB)
+library(emmeans)
+library(broom)
+library(broom.mixed)
+library(vegan)
+
+library(RColorBrewer)
+library(viridis)
+library(gridExtra)
+library(GGally)
+library(ggvegan)
+library(ggfortify) 
+library(ggnewscale)
+library(ggpattern)
+
+library(knitr)
+knitr::opts_chunk$set(comment=&quot;&quot;, cache=T, warning = F, message = F, fig.path = &quot;images/&quot;)
+options(digits=4) # for kables
+
+load(&quot;data/maxfield_data.rda&quot;)
+
+options(contrasts = c(&quot;contr.sum&quot;, &quot;contr.poly&quot;)) #needed for Type III SS
+
+anova_table &lt;- function(df, mod) { #for lmer models and lmerTest::anova
+  df %&gt;% select(trait, term, p.value) %&gt;% 
+    #mutate(p.value=p.value %&gt;% map_chr(~ format(.x,scientific=-2, digits=2 , nsmall=2)) %&gt;% 
+    #         str_replace(&quot;e-0(\\d)&quot;,&quot; x 10^-\\1^&quot;) %&gt;% str_replace(&quot;e-(\\d+)&quot;,&quot; x 10^-\\1^&quot;)) %&gt;%
+    pivot_wider(names_from=term, values_from=p.value) %&gt;% 
+    mutate(R2m = map_dbl(mod, ~ MuMIn::r.squaredGLMM(.x)[[1,&quot;R2m&quot;]]),
+           singular = map_lgl(mod, isSingular))
+}
+Anova_table &lt;- function(df) { #for glmmTMB models and car::Anova
+  df %&gt;% select(Trait=trait, term, p.value) %&gt;% 
+    pivot_wider(names_from=term, values_from=p.value,names_repair=&quot;unique&quot;)
+}
+select &lt;- dplyr::select
+snow_pal_grey &lt;- c(&quot;grey50&quot;,&quot;black&quot;)</code></pre>
+<div id="metadata" class="section level1">
+<h1>Metadata</h1>
+<pre class="r"><code>alldata &lt;- list(&quot;treatments&quot;=treatments %&gt;% select(year, plotid, water, water4, snow, sun_date,precip_est_mm),
+                &quot;leaftraits&quot;=lt.plantyr %&gt;% ungroup %&gt;% 
+                  select(year, round, day, plotid, plant, VWC.sm, any_of(c(leaftraits, fitnesstraits))) %&gt;% 
+                  arrange(year, round, plotid) %&gt;% drop_na(plant) %&gt;% filter(plant!=&quot;NA&quot;),
+                &quot;phystraits&quot;=pt.plantyr %&gt;% ungroup %&gt;% 
+                  select(year, round, plotid, plant, VWC.plant, VWC.sm, any_of(c(phystraits, fitnesstraits))) %&gt;% 
+                  arrange(year, round, plotid) %&gt;% drop_na(plant) %&gt;% filter(plant!=&quot;NA&quot;))
+
+purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,., &quot;.tsv&quot;), na=&quot;&quot;))</code></pre>
+<p>The following datasets are available in tab-delimited (TSV) format under the ‘data’ folder.</p>
+<div id="treatments" class="section level2">
+<h2>Treatments</h2>
+<table>
+<caption>The precipitation and snowmelt treatments in the split-plot design, with snowmelt dates for each plot and precipitation totals for each subplot.</caption>
+<colgroup>
+<col width="22%" />
+<col width="77%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">year</td>
+</tr>
+<tr class="even">
+<td align="left">plotid</td>
+<td align="left">plot number and subplot letter</td>
+</tr>
+<tr class="odd">
+<td align="left">water</td>
+<td align="left">precipitation treatment, with mock rainouts combined with controls</td>
+</tr>
+<tr class="even">
+<td align="left">water4</td>
+<td align="left">precipitation treatment, with mock rainouts separate from controls</td>
+</tr>
+<tr class="odd">
+<td align="left">snow</td>
+<td align="left">snowmelt treatment (in 2019, plot 2 was covered but coded as normal)</td>
+</tr>
+<tr class="even">
+<td align="left">sun_date</td>
+<td align="left">snowmelt date in each plot, determined by sunlight threshold</td>
+</tr>
+<tr class="odd">
+<td align="left">precip_est_mm</td>
+<td align="left">estimated summer precipitation in each subplot (see Methods S1)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="leaf-traits" class="section level2">
+<h2>Leaf traits</h2>
+<table>
+<caption>Morphological leaf traits measured during each round of sampling.</caption>
+<colgroup>
+<col width="22%" />
+<col width="77%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">year</td>
+</tr>
+<tr class="even">
+<td align="left">round</td>
+<td align="left">the first or second round of measurements (early/late summer)</td>
+</tr>
+<tr class="odd">
+<td align="left">day</td>
+<td align="left">the day of the year measurement was taken</td>
+</tr>
+<tr class="even">
+<td align="left">plotid</td>
+<td align="left">plot number and subplot letter</td>
+</tr>
+<tr class="odd">
+<td align="left">plant</td>
+<td align="left">unique plant identifier</td>
+</tr>
+<tr class="even">
+<td align="left">VWC.sm</td>
+<td align="left">The soil moisture averaged across the subplot on the date nearest the measurement</td>
+</tr>
+<tr class="odd">
+<td align="left">sla</td>
+<td align="left">Specific leaf area (cm² g⁻¹)</td>
+</tr>
+<tr class="even">
+<td align="left">trichome_density</td>
+<td align="left">Trichome density (cm⁻²)</td>
+</tr>
+<tr class="odd">
+<td align="left">water_content</td>
+<td align="left">Leaf water content (g H₂O g⁻¹)</td>
+</tr>
+<tr class="even">
+<td align="left">flowered</td>
+<td align="left">whether the plant flowered the next year</td>
+</tr>
+<tr class="odd">
+<td align="left">survived</td>
+<td align="left">whether the plant survived to the next year</td>
+</tr>
+<tr class="even">
+<td align="left">RGR</td>
+<td align="left">Relative growth rate from this year to the next (year⁻¹)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="physiology-traits" class="section level2">
+<h2>Physiology traits</h2>
+<table>
+<caption>Gas-exchange traits</caption>
+<colgroup>
+<col width="22%" />
+<col width="77%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">year</td>
+</tr>
+<tr class="even">
+<td align="left">round</td>
+<td align="left">the date the measurement was taken</td>
+</tr>
+<tr class="odd">
+<td align="left">plotid</td>
+<td align="left">plot number and subplot letter</td>
+</tr>
+<tr class="even">
+<td align="left">plant</td>
+<td align="left">unique plant identifier</td>
+</tr>
+<tr class="odd">
+<td align="left">VWC.plant</td>
+<td align="left">The soil moisture next to the plant on the date of measurement</td>
+</tr>
+<tr class="even">
+<td align="left">VWC.sm</td>
+<td align="left">The soil moisture averaged across the subplot on the date nearest the measurement</td>
+</tr>
+<tr class="odd">
+<td align="left">photosynthesis</td>
+<td align="left">Photosynthetic rate (µmol CO₂ m⁻² s⁻¹)</td>
+</tr>
+<tr class="even">
+<td align="left">conductance</td>
+<td align="left">Stomatal conductance (mol H₂O m⁻² s⁻¹)</td>
+</tr>
+<tr class="odd">
+<td align="left">WUE</td>
+<td align="left">Intrinsic water-use efficiency (µmol CO₂ mol⁻¹ H₂O)</td>
+</tr>
+<tr class="even">
+<td align="left">flowered</td>
+<td align="left">whether the plant flowered the next year</td>
+</tr>
+<tr class="odd">
+<td align="left">survived</td>
+<td align="left">whether the plant survived to the next year</td>
+</tr>
+<tr class="even">
+<td align="left">RGR</td>
+<td align="left">Relative growth rate from this year to the next (year⁻¹)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
