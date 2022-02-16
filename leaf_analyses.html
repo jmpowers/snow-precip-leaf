@@ -281,10 +281,6 @@ library(RColorBrewer)
 library(viridis)
 library(gridExtra)
 library(GGally)
-library(ggvegan)
-library(ggfortify) 
-library(ggnewscale)
-library(ggpattern)
 
 library(knitr)
 knitr::opts_chunk$set(comment=&quot;&quot;, cache=T, warning = F, message = F, fig.path = &quot;images/&quot;)
@@ -307,14 +303,14 @@ Anova_table &lt;- function(df) { #for glmmTMB models and car::Anova
     pivot_wider(names_from=term, values_from=p.value,names_repair=&quot;unique&quot;)
 }
 select &lt;- dplyr::select
-snow_pal_grey &lt;- c(&quot;grey50&quot;,&quot;black&quot;)</code></pre>
+lptraits &lt;- c(leaftraits, phystraits)</code></pre>
 <div id="metadata" class="section level1">
 <h1>Metadata</h1>
 <pre class="r"><code>alldata &lt;- list(&quot;treatments&quot;=treatments %&gt;% select(year, plotid, water, water4, snow, sun_date,precip_est_mm),
-                &quot;leaftraits&quot;=lt.plantyr %&gt;% ungroup %&gt;% 
+                &quot;leaftraits&quot;=lt.plantyr %&gt;% 
                   select(year, round, day, plotid, plant, VWC.sm, any_of(c(leaftraits, fitnesstraits))) %&gt;% 
                   arrange(year, round, plotid) %&gt;% drop_na(plant) %&gt;% filter(plant!=&quot;NA&quot;),
-                &quot;phystraits&quot;=pt.plantyr %&gt;% ungroup %&gt;% 
+                &quot;phystraits&quot;=pt.plantyr %&gt;% 
                   select(year, round, plotid, plant, VWC.plant, VWC.sm, any_of(c(phystraits, fitnesstraits))) %&gt;% 
                   arrange(year, round, plotid) %&gt;% drop_na(plant) %&gt;% filter(plant!=&quot;NA&quot;))
 
@@ -366,10 +362,9 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tbody>
 </table>
 </div>
-<div id="leaf-traits" class="section level2">
-<h2>Leaf traits</h2>
+<div id="morphological-leaf-traits" class="section level2">
+<h2>Morphological leaf traits</h2>
 <table>
-<caption>Morphological leaf traits measured during each round of sampling.</caption>
 <colgroup>
 <col width="22%" />
 <col width="77%" />
@@ -432,10 +427,9 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tbody>
 </table>
 </div>
-<div id="physiology-traits" class="section level2">
-<h2>Physiology traits</h2>
+<div id="physiological-gas-exchange-traits" class="section level2">
+<h2>Physiological gas-exchange traits</h2>
 <table>
-<caption>Gas-exchange traits</caption>
 <colgroup>
 <col width="22%" />
 <col width="77%" />
@@ -498,6 +492,38 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tbody>
 </table>
 </div>
+</div>
+<div id="sample-sizes" class="section level1">
+<h1>Sample sizes</h1>
+<pre class="r"><code>count_measurements &lt;- function(df, tr) summarize(df, across(all_of(tr), ~ sum(!is.na(.x)))) %&gt;% deframe()
+
+data.frame(dataset = c(&quot;Morphological traits&quot;, &quot;Physiological traits&quot;),
+           leaves = c(count_measurements(lt, &quot;leaf_area_cm2&quot;), count_measurements(pt, &quot;photosynthesis&quot;)),
+           plants = c(lt %&gt;% group_by(plantid) %&gt;% summarize(across(all_of(&quot;leaf_area_cm2&quot;), mean, na.rm=T)) %&gt;%
+                        count_measurements(&quot;leaf_area_cm2&quot;), 
+                      pt %&gt;% group_by(plantid) %&gt;% summarize(across(all_of(&quot;photosynthesis&quot;), mean, na.rm=T)) %&gt;%
+                        count_measurements(&quot;photosynthesis&quot;))) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dataset</th>
+<th align="right">leaves</th>
+<th align="right">plants</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Morphological traits</td>
+<td align="right">600</td>
+<td align="right">264</td>
+</tr>
+<tr class="even">
+<td align="left">Physiological traits</td>
+<td align="right">327</td>
+<td align="right">275</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

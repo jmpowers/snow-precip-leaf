@@ -36,10 +36,6 @@ library(RColorBrewer)
 library(viridis)
 library(gridExtra)
 library(GGally)
-library(ggvegan)
-library(ggfortify) 
-library(ggnewscale)
-library(ggpattern)
 
 library(knitr)
 knitr::opts_chunk$set(comment="", cache=T, warning = F, message = F, fig.path = "images/")
@@ -62,17 +58,17 @@ Anova_table <- function(df) { #for glmmTMB models and car::Anova
     pivot_wider(names_from=term, values_from=p.value,names_repair="unique")
 }
 select <- dplyr::select
-snow_pal_grey <- c("grey50","black")
+lptraits <- c(leaftraits, phystraits)
 ```
 
 # Metadata
 
 ```{r writeout}
 alldata <- list("treatments"=treatments %>% select(year, plotid, water, water4, snow, sun_date,precip_est_mm),
-                "leaftraits"=lt.plantyr %>% ungroup %>% 
+                "leaftraits"=lt.plantyr %>% 
                   select(year, round, day, plotid, plant, VWC.sm, any_of(c(leaftraits, fitnesstraits))) %>% 
                   arrange(year, round, plotid) %>% drop_na(plant) %>% filter(plant!="NA"),
-                "phystraits"=pt.plantyr %>% ungroup %>% 
+                "phystraits"=pt.plantyr %>% 
                   select(year, round, plotid, plant, VWC.plant, VWC.sm, any_of(c(phystraits, fitnesstraits))) %>% 
                   arrange(year, round, plotid) %>% drop_na(plant) %>% filter(plant!="NA"))
 
@@ -95,9 +91,7 @@ The following datasets are available in tab-delimited (TSV) format under the 'da
 |sun_date|snowmelt date in each plot, determined by sunlight threshold|
 |precip_est_mm|estimated summer precipitation in each subplot (see Methods S1)|
 
-## Leaf traits
-
-:Morphological leaf traits measured during each round of sampling.
+## Morphological leaf traits
 
 |Column|Description|
 |:- |:------ |
@@ -114,9 +108,7 @@ The following datasets are available in tab-delimited (TSV) format under the 'da
 |survived|whether the plant survived to the next year|
 |RGR|Relative growth rate from this year to the next (year⁻¹)|
 
-## Physiology traits
-
-:Gas-exchange traits
+## Physiological gas-exchange traits
 
 |Column|Description|
 |:- |:------ |
@@ -133,3 +125,15 @@ The following datasets are available in tab-delimited (TSV) format under the 'da
 |survived|whether the plant survived to the next year|
 |RGR|Relative growth rate from this year to the next (year⁻¹)|
 
+# Sample sizes
+
+```{r sample_sizes}
+count_measurements <- function(df, tr) summarize(df, across(all_of(tr), ~ sum(!is.na(.x)))) %>% deframe()
+
+data.frame(dataset = c("Morphological traits", "Physiological traits"),
+           leaves = c(count_measurements(lt, "leaf_area_cm2"), count_measurements(pt, "photosynthesis")),
+           plants = c(lt %>% group_by(plantid) %>% summarize(across(all_of("leaf_area_cm2"), mean, na.rm=T)) %>%
+                        count_measurements("leaf_area_cm2"), 
+                      pt %>% group_by(plantid) %>% summarize(across(all_of("photosynthesis"), mean, na.rm=T)) %>%
+                        count_measurements("photosynthesis"))) %>% kable()
+```
