@@ -1901,9 +1901,11 @@ selection_plots &lt;- expand_grid(treatment=c(&quot;water&quot;,&quot;snow&quot;
 </div>
 <div id="figure-4" class="section level2">
 <h2>Figure 4</h2>
-<pre class="r"><code>selection_plots$plot[[1]] + selection_plots$plot[[3]] + 
-  plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; theme(legend.position=&quot;top&quot;)</code></pre>
-<p><img src="figures/Figure_4-1.svg" width="864" /></p>
+<pre class="r"><code>(selection_plots$plot[[1]] + labs(tag=&quot;(a)&quot;)) + 
+(selection_plots$plot[[3]] + labs(tag=&quot;(b)&quot;)) + 
+  plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; 
+  theme(legend.position=&quot;top&quot;, plot.tag=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="figures/Figure_4-1.svg" width="912" /></p>
 </div>
 <div id="figure-5" class="section level2">
 <h2>Figure 5</h2>
@@ -1912,11 +1914,12 @@ selection_plots &lt;- expand_grid(treatment=c(&quot;water&quot;,&quot;snow&quot;
 </div>
 <div id="figure-s4" class="section level2">
 <h2>Figure S4</h2>
-<pre class="r"><code>(selection_plots$plot[[4]] + guides(linetype=&quot;none&quot;, color=&quot;none&quot;)) +
-selection_plots$plot[[5]] +
-(selection_plots$plot[[6]] + guides(linetype=&quot;none&quot;, color=&quot;none&quot;)) +
-  plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; theme(legend.position=&quot;top&quot;)</code></pre>
-<p><img src="figures/Figure_S4-1.svg" width="864" /></p>
+<pre class="r"><code>(selection_plots$plot[[4]] + guides(linetype=&quot;none&quot;, color=&quot;none&quot;) + labs(tag=&quot;(a)&quot;)) +
+(selection_plots$plot[[5]]  + labs(tag=&quot;(b)&quot;))+
+(selection_plots$plot[[6]] + guides(linetype=&quot;none&quot;, color=&quot;none&quot;) + labs(tag=&quot;(c)&quot;)) +
+  plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; 
+  theme(legend.position=&quot;top&quot;, plot.tag=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="figures/Figure_S4-1.svg" width="960" /></p>
 </div>
 </div>
 <div id="timing" class="section level1">

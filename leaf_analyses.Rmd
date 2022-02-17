@@ -545,9 +545,11 @@ selection_plots <- expand_grid(treatment=c("water","snow"), response = fitnesstr
 
 ## Figure 4
 
-```{r Figure_4, fig.width=9, fig.height=11}
-selection_plots$plot[[1]] + selection_plots$plot[[3]] + 
-  plot_layout(guides = "collect", ncol=1) & theme(legend.position="top")
+```{r Figure_4, fig.width=9.5, fig.height=11}
+(selection_plots$plot[[1]] + labs(tag="(a)")) + 
+(selection_plots$plot[[3]] + labs(tag="(b)")) + 
+  plot_layout(guides = "collect", ncol=1) & 
+  theme(legend.position="top", plot.tag=element_text(face="bold"))
 ```
 
 ## Figure 5
@@ -557,11 +559,12 @@ selection_plots$plot[[2]]
 
 ## Figure S4
 
-```{r Figure_S4, fig.width=9, fig.height=16}
-(selection_plots$plot[[4]] + guides(linetype="none", color="none")) +
-selection_plots$plot[[5]] +
-(selection_plots$plot[[6]] + guides(linetype="none", color="none")) +
-  plot_layout(guides = "collect", ncol=1) & theme(legend.position="top")
+```{r Figure_S4, fig.width=10, fig.height=16}
+(selection_plots$plot[[4]] + guides(linetype="none", color="none") + labs(tag="(a)")) +
+(selection_plots$plot[[5]]  + labs(tag="(b)"))+
+(selection_plots$plot[[6]] + guides(linetype="none", color="none") + labs(tag="(c)")) +
+  plot_layout(guides = "collect", ncol=1) & 
+  theme(legend.position="top", plot.tag=element_text(face="bold"))
 ```
 
 # Timing
