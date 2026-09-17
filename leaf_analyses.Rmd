@@ -1,4 +1,4 @@
---- 
+---
 title: "Code for \"Phenotypic plasticity and selection on leaf traits in response to snowmelt timing and summer precipitation\""
 author: "Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R. Campbell"
 date: "`r Sys.Date()`"
@@ -18,7 +18,6 @@ editor_options:
 img{ max-width:200%; height: auto; }
 td, th { padding : 6px }
 </style>
-
 ```{r setup, message=FALSE}
 library(tidyverse)
 library(lubridate)
@@ -486,7 +485,9 @@ emt.selection <- mod.selection %>%
          trait.trend.sd = trait.trend*sd.trait, std.error.sd=std.error*sd.trait) #multiply by SDto get change in fitness per SD
 ```
 
-## Table S3
+## Table S3 and Table 4
+
+Table S3 (snow): first 3 tables. Table 4 (water): next 3 tables.
 
 ```{r anova_selection, results='asis'}
 mod.selection %>% group_by(treatment, response) %>%
@@ -496,6 +497,74 @@ mod.selection %>% group_by(treatment, response) %>%
     Anova_table(.x %>% unnest(tests)) %>% kable() %>% print})
 ```
 
+## Selection in each year and treatment
+
+```{r selection_split, eval=F}
+selection_split_mod <- function(trait, response, set, .year, .snow, .water, drop=TRUE) { 
+  family <- ifelse(response=="RGR", "gaussian", "binomial") 
+  t.plantyr <- list(lt = lt.plantyr.r2, pt = pt.plantyr)[[set]] %>% 
+    rename("trait"=trait,"response"=response) %>% 
+    select(year, snow, water, trait, response, plot) %>% 
+    filter(year == .year, snow == .snow, water == .water) %>% 
+    drop_na(trait, response)
+  options(contrasts = c("contr.sum", "contr.poly"))
+  print(paste(response, .year, .snow, .water, trait))
+  if(nrow(t.plantyr) == 0) return(NA)
+  glm(response ~ trait, data=t.plantyr, family=family)
+}
+selection.combos <- expand_grid(response = fitnesstraits, set = c("lt", "pt"),
+                                .year = levels(treatments$year),
+                                .snow = levels(treatments$snow), .water = levels(treatments$water)) 
+
+mod.selection.split <- selection.combos  %>% 
+  full_join(tibble(trait=c(leaftraits, phystraits), 
+                   set = c(rep("lt", length(leaftraits)), rep("pt", length(phystraits))))) %>% 
+  mutate(model = pmap(., selection_split_mod, drop=F),
+         coefs = map(model, tidy))
+
+coef.selection.split <- mod.selection.split %>% 
+  select(-model) %>% unnest(coefs) %>% filter(term=="trait") %>% 
+  mutate(sd.trait=alltraits.sd[trait], estimate.sd = estimate*sd.trait, std.error.sd=std.error*sd.trait) #multiply by SD to get change in fitness per SD
+
+ggplot(coef.selection.split, aes(x=paste(.year, .snow, .water), y=log(estimate.sd))) +
+  facet_grid(vars(response), vars(trait)) + geom_point()
+```
+
+
+```{r selection_year, fig.width=12}
+selection_year_mod <- function(trait, response, set, .year, drop=TRUE) { 
+  family <- ifelse(response=="RGR", "gaussian", "binomial") 
+  t.plantyr <- list(lt = lt.plantyr.r2, pt = pt.plantyr)[[set]] %>% 
+    rename("trait"=trait,"response"=response) %>% 
+    select(year, snow, water, trait, response, plot) %>% 
+    filter(year == .year) %>% 
+    drop_na(trait, response)
+  options(contrasts = c("contr.sum", "contr.poly"))
+  if(nrow(t.plantyr) == 0) return(NA)
+  glm(response ~ trait, data=t.plantyr, family=family)
+}
+selection.combos <- expand_grid(response = fitnesstraits, set = c("lt", "pt"),
+                                .year = levels(treatments$year)) 
+
+mod.selection.split <- selection.combos  %>% 
+  full_join(tibble(trait=c(leaftraits, phystraits), 
+                   set = c(rep("lt", length(leaftraits)), rep("pt", length(phystraits))))) %>% 
+  mutate(model = pmap(., selection_year_mod, drop=F),
+         coefs = map(model, tidy))
+
+coef.selection.split <- mod.selection.split %>% 
+  select(-model) %>% unnest(coefs) %>% filter(term=="trait") %>% 
+  mutate(sd.trait=alltraits.sd[trait], estimate.sd = estimate*sd.trait, std.error.sd=std.error*sd.trait) #multiply by SD to get change in fitness per SD
+
+ggplot(coef.selection.split, aes(x=.year, y=estimate.sd, color=.year,
+                                 ymax=estimate.sd+std.error.sd, ymin = estimate.sd-std.error.sd)) +
+  facet_grid(vars(response), vars(trait), labeller = as_labeller(c(traitnames, fitnessnames))) + 
+  geom_hline(yintercept=0) + geom_pointrange(size=1) + theme_minimal() +
+  scale_color_manual(values = year_pal) + labs(y="SD-standardized slope", x="Year")
+```
+
+
+## Figure 4
 
 ```{r plot_selection}
 plot_selection_facets <- function(response, treatment) {
@@ -542,8 +611,6 @@ plot_selection_facets <- function(response, treatment) {
 selection_plots <- expand_grid(treatment=c("water","snow"), response = fitnesstraits) %>% 
   mutate(plot = pmap(., plot_selection_facets))
 ```
-
-## Figure 4
 
 ```{r Figure_4, fig.width=9.5, fig.height=11}
 (selection_plots$plot[[1]] + labs(tag="(a)")) + 

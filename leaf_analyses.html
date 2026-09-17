@@ -11,11 +11,11 @@
 
 <meta name="author" content="Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R. Campbell" />
 
-<meta name="date" content="2022-02-16" />
+<meta name="date" content="2026-09-17" />
 
 <title>Code for “Phenotypic plasticity and selection on leaf traits in response to snowmelt timing and summer precipitation”</title>
 
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -31,7 +31,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="libs/navigation-1.1/tabsets.js"></script>
@@ -66,6 +66,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -87,6 +88,9 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
 pre code {
   padding: 0;
 }
@@ -106,8 +110,8 @@ pre code {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -115,16 +119,9 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -244,7 +241,7 @@ div.tocify {
 <div id="header">
 
 <div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
@@ -253,9 +250,12 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Code for “Phenotypic plasticity and selection on leaf traits in response to snowmelt timing and summer precipitation”</h1>
-<h4 class="author">Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R. Campbell</h4>
-<h4 class="date">2022-02-16</h4>
+<h1 class="title toc-ignore">Code for “Phenotypic plasticity and
+selection on leaf traits in response to snowmelt timing and summer
+precipitation”</h1>
+<h4 class="author">Jocelyn Navarro, John M. Powers, Ayaka Paul, Diane R.
+Campbell</h4>
+<h4 class="date">2026-09-17</h4>
 
 </div>
 
@@ -316,11 +316,14 @@ lptraits &lt;- c(leaftraits, phystraits)</code></pre>
                   arrange(year, round, plotid) %&gt;% drop_na(plant) %&gt;% filter(plant!=&quot;NA&quot;))
 
 purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,., &quot;.tsv&quot;), na=&quot;&quot;))</code></pre>
-<p>The following datasets are available in tab-delimited (TSV) format under the ‘data’ folder.</p>
+<p>The following datasets are available in tab-delimited (TSV) format
+under the ‘data’ folder.</p>
 <div id="treatments" class="section level2">
 <h2>Treatments</h2>
 <table>
-<caption>The precipitation and snowmelt treatments in the split-plot design, with snowmelt dates for each plot and precipitation totals for each subplot.</caption>
+<caption>The precipitation and snowmelt treatments in the split-plot
+design, with snowmelt dates for each plot and precipitation totals for
+each subplot.</caption>
 <colgroup>
 <col width="22%" />
 <col width="77%" />
@@ -342,23 +345,28 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="odd">
 <td align="left">water</td>
-<td align="left">precipitation treatment, with mock rainouts combined with controls</td>
+<td align="left">precipitation treatment, with mock rainouts combined
+with controls</td>
 </tr>
 <tr class="even">
 <td align="left">water4</td>
-<td align="left">precipitation treatment, with mock rainouts separate from controls</td>
+<td align="left">precipitation treatment, with mock rainouts separate
+from controls</td>
 </tr>
 <tr class="odd">
 <td align="left">snow</td>
-<td align="left">snowmelt treatment (in 2019, plot 2 was covered but coded as normal)</td>
+<td align="left">snowmelt treatment (in 2019, plot 2 was covered but
+coded as normal)</td>
 </tr>
 <tr class="even">
 <td align="left">sun_date</td>
-<td align="left">snowmelt date in each plot, determined by sunlight threshold</td>
+<td align="left">snowmelt date in each plot, determined by sunlight
+threshold</td>
 </tr>
 <tr class="odd">
 <td align="left">precip_est_mm</td>
-<td align="left">estimated summer precipitation in each subplot (see Methods S1)</td>
+<td align="left">estimated summer precipitation in each subplot (see
+Methods S1)</td>
 </tr>
 </tbody>
 </table>
@@ -383,7 +391,8 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="even">
 <td align="left">round</td>
-<td align="left">the first or second round of measurements (early/late summer)</td>
+<td align="left">the first or second round of measurements (early/late
+summer)</td>
 </tr>
 <tr class="odd">
 <td align="left">day</td>
@@ -399,7 +408,8 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="even">
 <td align="left">VWC.sm</td>
-<td align="left">the soil moisture averaged across the subplot on the date nearest the measurement</td>
+<td align="left">the soil moisture averaged across the subplot on the
+date nearest the measurement</td>
 </tr>
 <tr class="odd">
 <td align="left">sla</td>
@@ -419,7 +429,8 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="odd">
 <td align="left">RGR</td>
-<td align="left">relative growth rate from this year to the next (year⁻¹)</td>
+<td align="left">relative growth rate from this year to the next
+(year⁻¹)</td>
 </tr>
 <tr class="even">
 <td align="left">flowered</td>
@@ -460,11 +471,13 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="odd">
 <td align="left">VWC.plant</td>
-<td align="left">the soil moisture next to the plant on the date of measurement</td>
+<td align="left">the soil moisture next to the plant on the date of
+measurement</td>
 </tr>
 <tr class="even">
 <td align="left">VWC.sm</td>
-<td align="left">the soil moisture averaged across the subplot on the date nearest the measurement</td>
+<td align="left">the soil moisture averaged across the subplot on the
+date nearest the measurement</td>
 </tr>
 <tr class="odd">
 <td align="left">photosynthesis</td>
@@ -476,7 +489,8 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="odd">
 <td align="left">WUE</td>
-<td align="left">intrinsic water-use efficiency (µmol CO₂ mol⁻¹ H₂O)</td>
+<td align="left">intrinsic water-use efficiency (µmol CO₂ mol⁻¹
+H₂O)</td>
 </tr>
 <tr class="even">
 <td align="left">survived</td>
@@ -484,7 +498,8 @@ purrr::walk(names(alldata), ~write_tsv(alldata[[.]], paste0(&quot;data/&quot;,.,
 </tr>
 <tr class="odd">
 <td align="left">RGR</td>
-<td align="left">relative growth rate from this year to the next (year⁻¹)</td>
+<td align="left">relative growth rate from this year to the next
+(year⁻¹)</td>
 </tr>
 <tr class="even">
 <td align="left">flowered</td>
@@ -553,6 +568,17 @@ mod.split.tests &lt;- map(mod.split, anova, ddf=&quot;Ken&quot;) %&gt;% map_dfr(
 mod.split.emm &lt;- map_dfr(mod.split, ~ summary(emmeans(ref_grid(.x), ~ year * snow * water)), .id = &quot;trait&quot;)
   anova_table(mod.split.tests, mod.split) %&gt;% kable()</code></pre>
 <table>
+<colgroup>
+<col width="18%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="11%" />
+<col width="11%" />
+<col width="17%" />
+<col width="7%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">trait</th>
@@ -889,7 +915,8 @@ plot_split_plot(lt.mod.split.rm.3.emm, lt.repeated.3.subplotround, leaftraits, f
 </div>
 </div>
 </div>
-<div id="models-with-snowmelt-date-and-total-precipitation" class="section level1">
+<div id="models-with-snowmelt-date-and-total-precipitation"
+class="section level1">
 <h1>Models with snowmelt date and total precipitation</h1>
 <div id="table-2" class="section level2">
 <h2>Table 2</h2>
@@ -908,7 +935,14 @@ mod.abs &lt;- c(map(set_names(leaftraits),
 mod.abs.coefs &lt;- map_dfr(mod.abs, tidy, .id=&quot;trait&quot;)
 mod.abs.tests &lt;- map(mod.abs, anova, ddf=&quot;Ken&quot;) %&gt;% map_dfr(tidy, .id=&quot;trait&quot;)
 anova_table(mod.abs.tests, mod.abs) %&gt;% kable()</code></pre>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="24%" />
+<col width="12%" />
+<col width="20%" />
+<col width="32%" />
+<col width="10%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">trait</th>
@@ -1368,14 +1402,16 @@ emt.selection &lt;- mod.selection %&gt;%
   select(response, treatment, trait, yrtrend) %&gt;% unnest(yrtrend) %&gt;% 
   mutate(sd.trait=alltraits.sd[trait], 
          trait.trend.sd = trait.trend*sd.trait, std.error.sd=std.error*sd.trait) #multiply by SDto get change in fitness per SD</code></pre>
-<div id="table-s3" class="section level2">
-<h2>Table S3</h2>
+<div id="table-s3-and-table-4" class="section level2">
+<h2>Table S3 and Table 4</h2>
+<p>Table S3 (snow): first 3 tables. Table 4 (water): next 3 tables.</p>
 <pre class="r"><code>mod.selection %&gt;% group_by(treatment, response) %&gt;%
   group_walk(function(.x,.y) {cat(paste(&quot;Effect of trait on whether a plant&quot;,
                                         ifelse(.y$response==&quot;RGR&quot;, &quot;grew faster&quot;, as.character(.y$response)),
                                         &quot;under different&quot;,.y$treatment,&quot;conditions&quot;)); 
     Anova_table(.x %&gt;% unnest(tests)) %&gt;% kable() %&gt;% print})</code></pre>
-<p>Effect of trait on whether a plant flowered under different snow conditions</p>
+<p>Effect of trait on whether a plant flowered under different snow
+conditions</p>
 <table style="width:100%;">
 <colgroup>
 <col width="17%" />
@@ -1470,8 +1506,19 @@ emt.selection &lt;- mod.selection %&gt;%
 </tr>
 </tbody>
 </table>
-<p>Effect of trait on whether a plant grew faster under different snow conditions</p>
+<p>Effect of trait on whether a plant grew faster under different snow
+conditions</p>
 <table>
+<colgroup>
+<col width="20%" />
+<col width="14%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="13%" />
+<col width="13%" />
+<col width="12%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
@@ -1547,8 +1594,19 @@ emt.selection &lt;- mod.selection %&gt;%
 </tr>
 </tbody>
 </table>
-<p>Effect of trait on whether a plant survived under different snow conditions</p>
+<p>Effect of trait on whether a plant survived under different snow
+conditions</p>
 <table>
+<colgroup>
+<col width="20%" />
+<col width="14%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="13%" />
+<col width="13%" />
+<col width="12%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
@@ -1624,8 +1682,19 @@ emt.selection &lt;- mod.selection %&gt;%
 </tr>
 </tbody>
 </table>
-<p>Effect of trait on whether a plant flowered under different water conditions</p>
+<p>Effect of trait on whether a plant flowered under different water
+conditions</p>
 <table>
+<colgroup>
+<col width="20%" />
+<col width="14%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
@@ -1701,8 +1770,19 @@ emt.selection &lt;- mod.selection %&gt;%
 </tr>
 </tbody>
 </table>
-<p>Effect of trait on whether a plant grew faster under different water conditions</p>
+<p>Effect of trait on whether a plant grew faster under different water
+conditions</p>
 <table>
+<colgroup>
+<col width="20%" />
+<col width="14%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
@@ -1778,8 +1858,19 @@ emt.selection &lt;- mod.selection %&gt;%
 </tr>
 </tbody>
 </table>
-<p>Effect of trait on whether a plant survived under different water conditions</p>
+<p>Effect of trait on whether a plant survived under different water
+conditions</p>
 <table>
+<colgroup>
+<col width="20%" />
+<col width="14%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
@@ -1855,6 +1946,70 @@ emt.selection &lt;- mod.selection %&gt;%
 </tr>
 </tbody>
 </table>
+</div>
+<div id="selection-in-each-year-and-treatment" class="section level2">
+<h2>Selection in each year and treatment</h2>
+<pre class="r"><code>selection_split_mod &lt;- function(trait, response, set, .year, .snow, .water, drop=TRUE) { 
+  family &lt;- ifelse(response==&quot;RGR&quot;, &quot;gaussian&quot;, &quot;binomial&quot;) 
+  t.plantyr &lt;- list(lt = lt.plantyr.r2, pt = pt.plantyr)[[set]] %&gt;% 
+    rename(&quot;trait&quot;=trait,&quot;response&quot;=response) %&gt;% 
+    select(year, snow, water, trait, response, plot) %&gt;% 
+    filter(year == .year, snow == .snow, water == .water) %&gt;% 
+    drop_na(trait, response)
+  options(contrasts = c(&quot;contr.sum&quot;, &quot;contr.poly&quot;))
+  print(paste(response, .year, .snow, .water, trait))
+  if(nrow(t.plantyr) == 0) return(NA)
+  glm(response ~ trait, data=t.plantyr, family=family)
+}
+selection.combos &lt;- expand_grid(response = fitnesstraits, set = c(&quot;lt&quot;, &quot;pt&quot;),
+                                .year = levels(treatments$year),
+                                .snow = levels(treatments$snow), .water = levels(treatments$water)) 
+
+mod.selection.split &lt;- selection.combos  %&gt;% 
+  full_join(tibble(trait=c(leaftraits, phystraits), 
+                   set = c(rep(&quot;lt&quot;, length(leaftraits)), rep(&quot;pt&quot;, length(phystraits))))) %&gt;% 
+  mutate(model = pmap(., selection_split_mod, drop=F),
+         coefs = map(model, tidy))
+
+coef.selection.split &lt;- mod.selection.split %&gt;% 
+  select(-model) %&gt;% unnest(coefs) %&gt;% filter(term==&quot;trait&quot;) %&gt;% 
+  mutate(sd.trait=alltraits.sd[trait], estimate.sd = estimate*sd.trait, std.error.sd=std.error*sd.trait) #multiply by SD to get change in fitness per SD
+
+ggplot(coef.selection.split, aes(x=paste(.year, .snow, .water), y=log(estimate.sd))) +
+  facet_grid(vars(response), vars(trait)) + geom_point()</code></pre>
+<pre class="r"><code>selection_year_mod &lt;- function(trait, response, set, .year, drop=TRUE) { 
+  family &lt;- ifelse(response==&quot;RGR&quot;, &quot;gaussian&quot;, &quot;binomial&quot;) 
+  t.plantyr &lt;- list(lt = lt.plantyr.r2, pt = pt.plantyr)[[set]] %&gt;% 
+    rename(&quot;trait&quot;=trait,&quot;response&quot;=response) %&gt;% 
+    select(year, snow, water, trait, response, plot) %&gt;% 
+    filter(year == .year) %&gt;% 
+    drop_na(trait, response)
+  options(contrasts = c(&quot;contr.sum&quot;, &quot;contr.poly&quot;))
+  if(nrow(t.plantyr) == 0) return(NA)
+  glm(response ~ trait, data=t.plantyr, family=family)
+}
+selection.combos &lt;- expand_grid(response = fitnesstraits, set = c(&quot;lt&quot;, &quot;pt&quot;),
+                                .year = levels(treatments$year)) 
+
+mod.selection.split &lt;- selection.combos  %&gt;% 
+  full_join(tibble(trait=c(leaftraits, phystraits), 
+                   set = c(rep(&quot;lt&quot;, length(leaftraits)), rep(&quot;pt&quot;, length(phystraits))))) %&gt;% 
+  mutate(model = pmap(., selection_year_mod, drop=F),
+         coefs = map(model, tidy))
+
+coef.selection.split &lt;- mod.selection.split %&gt;% 
+  select(-model) %&gt;% unnest(coefs) %&gt;% filter(term==&quot;trait&quot;) %&gt;% 
+  mutate(sd.trait=alltraits.sd[trait], estimate.sd = estimate*sd.trait, std.error.sd=std.error*sd.trait) #multiply by SD to get change in fitness per SD
+
+ggplot(coef.selection.split, aes(x=.year, y=estimate.sd, color=.year,
+                                 ymax=estimate.sd+std.error.sd, ymin = estimate.sd-std.error.sd)) +
+  facet_grid(vars(response), vars(trait), labeller = as_labeller(c(traitnames, fitnessnames))) + 
+  geom_hline(yintercept=0) + geom_pointrange(size=1) + theme_minimal() +
+  scale_color_manual(values = year_pal) + labs(y=&quot;SD-standardized slope&quot;, x=&quot;Year&quot;)</code></pre>
+<p><img src="figures/selection_year-1.svg" width="1152" /></p>
+</div>
+<div id="figure-4" class="section level2">
+<h2>Figure 4</h2>
 <pre class="r"><code>plot_selection_facets &lt;- function(response, treatment) {
   emt.selection.filtered &lt;- emt.selection %&gt;% 
     select(!!!treatment, response, year, trait, p.value) %&gt;% 
@@ -1898,9 +2053,6 @@ emt.selection &lt;- mod.selection %&gt;%
 
 selection_plots &lt;- expand_grid(treatment=c(&quot;water&quot;,&quot;snow&quot;), response = fitnesstraits) %&gt;% 
   mutate(plot = pmap(., plot_selection_facets))</code></pre>
-</div>
-<div id="figure-4" class="section level2">
-<h2>Figure 4</h2>
 <pre class="r"><code>(selection_plots$plot[[1]] + labs(tag=&quot;(a)&quot;)) + 
 (selection_plots$plot[[3]] + labs(tag=&quot;(b)&quot;)) + 
   plot_layout(guides = &quot;collect&quot;, ncol=1) &amp; 
